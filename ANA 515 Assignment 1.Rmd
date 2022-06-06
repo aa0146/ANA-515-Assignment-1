@@ -1,0 +1,51 @@
+---
+title: "ANA 515 Assignment 1"
+author: "Abhijeet Alshi"
+date: '2022-06-01'
+output: 
+  html_document:
+    theme: 
+      bootswatch: cerulean
+---
+
+```{r, include=FALSE}
+#Code chunk to get the dataset from GitHub/fivethirtyeight
+gun_deaths = read.csv("https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv")
+```
+
+
+```{r setup, include=FALSE}
+#code chunk to call the installed packages
+library(bslib)
+library(knitr)
+library(tidyverse)
+```
+
+```{r, include=FALSE}
+#code chunk to create a subset of gun_deaths
+youth = subset(gun_deaths,age<=65)
+```
+
+```{r, include=FALSE}
+#code chunk to get a summary of the youth dataset
+summary(youth)
+```
+
+## Gun deaths by age
+
+We have data about `r nrow(gun_deaths)` individuals killed by guns. Only `r nrow(gun_deaths) - nrow(youth)` are older than 65. The distribution of the remainder is shown below: 
+
+```{r youth-dist, echo = FALSE}
+youth %>% 
+  ggplot(aes(age)) + 
+  geom_freqpoly(binwidth = 1)
+```
+
+## Gun deaths by race
+The below distribution shows the distribution of gun deaths by race: 
+
+```{r race-dist, echo = FALSE}
+youth %>% 
+  ggplot(aes(fct_infreq(race)%>%fct_rev())) + geom_bar() + coord_flip()+labs(x="Victim race")
+```
+
